@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+    index.html - Home Page
+    Main landing page with game overview, statistics, and navigation to other pages
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Run - Home</title>
+    <!-- Main styles for all pages except game -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="home-page">
+    <nav>
+        <ul>
+            <li><a href="index.html" class="active">🏠 Home</a></li>
+            <li><a href="game.html">🎮 Play Game</a></li>
+            <li><a href="register.html">📝 Register</a></li>
+            <li><a href="login.html">🔐 Login</a></li>
+            <li><a href="rankings.html">🏆 Rankings</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <h1>🚇 TRAIN RUN</h1>
+        <p>Experience the Ultimate Endless Runner Adventure!</p>
+        
+        <div class="button-container">
+            <a href="game.html" class="btn">🎮 PLAY NOW</a>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-value" id="high-score">0</div>
+            <div class="stat-label">High Score</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">🪙</div>
+            <div class="stat-value" id="total-coins">0</div>
+            <div class="stat-label">Total Coins</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">🎮</div>
+            <div class="stat-value" id="games-played">0</div>
+            <div class="stat-label">Games Played</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon">📏</div>
+            <div class="stat-value" id="total-distance">0</div>
+            <div class="stat-label">Total Distance (m)</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>🎮 Train Run - WebGL Endless Runner Game</p>
+        <p>Built with HTML, CSS, JavaScript, and JSON</p>
+        <p id="user-info-footer"></p>
+    </footer>
+
+    <script src="./js/storage.js"></script>
+    <script src="./js/auth.js"></script>
+    <script>
+        // Load and display stats on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentUser = AuthManager.getCurrentUser();
+            
+            if (currentUser) {
+                // Display logged-in user's stats
+                document.getElementById('high-score').textContent = currentUser.highScore;
+                document.getElementById('total-coins').textContent = currentUser.totalCoins;
+                document.getElementById('games-played').textContent = currentUser.gamesPlayed;
+                document.getElementById('total-distance').textContent = currentUser.totalDistance;
+                
+                // Show welcome message and logout link
+                const footerInfo = document.getElementById('user-info-footer');
+                footerInfo.innerHTML = `Welcome, <strong>${currentUser.name}</strong>! | <a href="#" onclick="logout(); return false;">Logout</a>`;
+            } else {
+                // Display general stats
+                const stats = StorageManager.getAllStats();
+                document.getElementById('high-score').textContent = stats.highScore;
+                document.getElementById('total-coins').textContent = stats.totalCoins;
+                document.getElementById('games-played').textContent = stats.gamesPlayed;
+                document.getElementById('total-distance').textContent = stats.totalDistance;
+                
+                // Show login prompt
+                const footerInfo = document.getElementById('user-info-footer');
+                footerInfo.innerHTML = `<a href="login.html">Login</a> or <a href="register.html">Register</a> to track your scores!`;
+            }
+        });
+        
+        function logout() {
+            AuthManager.logout();
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

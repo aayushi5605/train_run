@@ -1,0 +1,821 @@
+/* ==========================================
+   MAIN.CSS - All styles for non-game pages
+   Consolidated styles for index, login, register, and rankings pages
+   ========================================== */
+
+/* ==========================================
+   BASE STYLES - Global defaults
+   ========================================== */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ==========================================
+   NAVIGATION BAR - Shared across all pages
+   ========================================== */
+
+nav {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1002;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1em;
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+nav a.active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   HOME PAGE STYLES
+   ========================================== */
+
+body.home-page {
+  overflow-x: hidden;
+  height: auto;
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
+body.home-page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body.home-page nav {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px 30px;
+  position: static;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+body.home-page nav ul {
+  gap: 30px;
+}
+
+body.home-page nav a {
+  font-size: 1.1em;
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+body.home-page nav a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+body.home-page nav a.active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 100px 20px 60px;
+  position: relative;
+}
+
+.hero h1 {
+  font-size: 5em;
+  margin-bottom: 20px;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+  animation: fadeInDown 1s ease-out;
+}
+
+.hero p {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+  opacity: 0.9;
+  animation: fadeIn 1.5s ease-out;
+}
+
+/* Stats Container */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 100px auto 60px !important;
+  padding: 0 20px !important;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 1s ease-out;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.stat-icon {
+  font-size: 3em;
+  margin-bottom: 15px;
+}
+
+.stat-value {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.stat-label {
+  font-size: 1.2em;
+  margin-top: 10px;
+  opacity: 0.9;
+}
+
+/* Button Container */
+.button-container {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.btn {
+  display: inline-block;
+  background: #4CAF50;
+  color: white;
+  padding: 20px 50px !important;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 1.5em;
+  margin: 10px 15px; 
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+}
+
+.btn:hover {
+  background: #45a049;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.btn-secondary {
+  background: #ff6b00;
+}
+
+.btn-secondary:hover {
+  background: #e65100;
+}
+
+/* Features Section */
+.features {
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 0 20px;
+}
+
+.features h2 {
+  text-align: center;
+  font-size: 3em;
+  margin-bottom: 50px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.feature-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.feature-icon {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.feature-item h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.feature-item p {
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Footer */
+body.home-page footer {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(0, 0, 0, 0.2);
+  margin-top: 80px;
+}
+
+body.home-page footer p {
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+body.home-page footer a {
+  color: #ffd700;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+body.home-page footer a:hover {
+  color: #ffed4e;
+  text-decoration: underline;
+}
+
+#user-info-footer {
+  margin-top: 20px;
+}
+
+#user-info-footer a {
+  color: #ffd700;
+  text-decoration: underline;
+}
+
+/* ==========================================
+   LOGIN PAGE STYLES
+   ========================================== */
+
+body.login-page {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+body.login-page .container {
+    max-width: 450px;
+    margin: 90px auto;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+body.login-page h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.login-page .form-group {
+    margin-bottom: 25px;
+}
+
+body.login-page label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+body.login-page input {
+    width: 90%;
+    padding: 12px 15px;
+    font-size: 1em;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+body.login-page input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background: white;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+body.login-page .error-message {
+    color: #ffeb3b;
+    font-size: 0.95em;
+    margin-top: 15px;
+    display: none;
+    background: rgba(255, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 5px;
+    border-left: 3px solid #ffeb3b;
+    text-align: center;
+}
+
+body.login-page .error-message.show {
+    display: block;
+}
+
+body.login-page .btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    background: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.login-page .btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.login-page .btn:active {
+    transform: translateY(0);
+}
+
+body.login-page .register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1em;
+}
+
+body.login-page .register-link a {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+body.login-page .register-link a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================
+   REGISTER PAGE STYLES
+   ========================================== */
+
+body.register-page {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar for register page */
+body.register-page::-webkit-scrollbar {
+    width: 10px;
+}
+
+body.register-page::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+body.register-page::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+body.register-page::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+body.register-page .container {
+    max-width: 500px;
+    margin: 90px auto;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+body.register-page h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.register-page .form-group {
+    margin-bottom: 25px;
+}
+
+body.register-page label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+body.register-page input {
+    width: 90%;
+    padding: 12px 15px;
+    font-size: 1em;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+body.register-page input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    background: white;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+body.register-page .error-message {
+    color: #ffeb3b;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: none;
+    background: rgba(255, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 5px;
+    border-left: 3px solid #ffeb3b;
+}
+
+body.register-page .error-message.show {
+    display: block;
+}
+
+body.register-page .success-message {
+    color: #4CAF50;
+    font-size: 1em;
+    margin-bottom: 20px;
+    display: none;
+    background: rgba(76, 175, 80, 0.2);
+    padding: 12px;
+    border-radius: 5px;
+    border-left: 3px solid #4CAF50;
+    text-align: center;
+}
+
+body.register-page .success-message.show {
+    display: block;
+}
+
+body.register-page .btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    background: #4CAF50;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.register-page .btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.register-page .btn:active {
+    transform: translateY(0);
+}
+
+body.register-page .login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1em;
+}
+
+body.register-page .login-link a {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+body.register-page .login-link a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================
+   RANKINGS PAGE STYLES
+   ========================================== */
+
+body.rankings-page {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-height: 100vh;
+}
+
+body.rankings-page .container {
+    max-width: 1000px;
+    margin: 90px auto;
+    padding: 0 20px;
+}
+
+body.rankings-page h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 3em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.rankings-page .user-info {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+body.rankings-page .user-info h2 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+body.rankings-page .user-info p {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+body.rankings-page .logout-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 25px;
+    background: #ff6b00;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 1em;
+}
+
+body.rankings-page .logout-btn:hover {
+    background: #e65100;
+    transform: translateY(-2px);
+}
+
+body.rankings-page .rankings-table {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+body.rankings-page table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+body.rankings-page thead {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+body.rankings-page th {
+    padding: 20px;
+    text-align: left;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+body.rankings-page th:first-child {
+    text-align: center;
+    width: 80px;
+}
+
+body.rankings-page td {
+    padding: 18px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.rankings-page td:first-child {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+body.rankings-page tbody tr {
+    transition: all 0.3s ease;
+}
+
+body.rankings-page tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+body.rankings-page .rank-medal {
+    font-size: 1.5em;
+}
+
+body.rankings-page .rank-1 {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+}
+
+body.rankings-page .rank-2 {
+    background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+    color: #333;
+}
+
+body.rankings-page .rank-3 {
+    background: linear-gradient(135deg, #cd7f32, #e09c5f);
+    color: #fff;
+}
+
+body.rankings-page .current-user {
+    background: rgba(76, 175, 80, 0.2);
+    border-left: 4px solid #4CAF50;
+}
+
+body.rankings-page .no-data {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.3em;
+    opacity: 0.8;
+}
+
+body.rankings-page .no-data-icon {
+    font-size: 4em;
+    margin-bottom: 20px;
+}
+
+#user-info {
+  display: none;
+}
+
+#no-data {
+  display: none;
+}
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 768px) {
+  /* Home Page Responsive */
+  body.home-page nav ul {
+    gap: 15px;
+  }
+
+  body.home-page nav a {
+    font-size: 0.9em;
+    padding: 8px 15px;
+  }
+
+  .hero h1 {
+    font-size: 3em;
+  }
+  
+  .hero p {
+    font-size: 1.2em;
+  }
+  
+  .btn {
+    padding: 15px 35px;
+    font-size: 1.2em;
+  }
+
+  /* Login Page Responsive */
+  body.login-page .container {
+    margin: 40px 20px;
+    padding: 25px;
+  }
+
+  body.login-page h1 {
+    font-size: 2em;
+  }
+
+  /* Register Page Responsive */
+  body.register-page .container {
+    margin: 20px;
+    padding: 25px;
+  }
+
+  body.register-page h1 {
+    font-size: 2em;
+  }
+
+  /* Rankings Page Responsive */
+  body.rankings-page h1 {
+    font-size: 2em;
+  }
+
+  body.rankings-page table {
+    font-size: 0.9em;
+  }
+
+  body.rankings-page th,
+  body.rankings-page td {
+    padding: 12px 10px;
+  }
+
+  body.rankings-page th:nth-child(4),
+  body.rankings-page td:nth-child(4) {
+    display: none;
+  }
+}

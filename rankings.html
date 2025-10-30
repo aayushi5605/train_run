@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--
+    rankings.html - Leaderboard Page
+    Displays top players ranked by high scores with user statistics
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rankings - Train Run</title>
+    <!-- Main styles for all pages except game -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="rankings-page">
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="game.html">🎮 Play Game</a></li>
+            <li><a href="register.html">📝 Register</a></li>
+            <li><a href="login.html">🔐 Login</a></li>
+            <li><a href="rankings.html" class="active">🏆 Rankings</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>🏆 Top Players Rankings</h1>
+
+        <div id="user-info" class="user-info">
+            <h2>Welcome, <span id="user-name"></span>!</h2>
+            <p>Your Rank: <strong id="user-rank">-</strong> | High Score: <strong id="user-score">0</strong></p>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="rankings-table">
+            <table id="rankings-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player Name</th>
+                        <th>High Score</th>
+                        <th>Total Coins</th>
+                        <th>Games Played</th>
+                    </tr>
+                </thead>
+                <tbody id="rankings-body">
+                    <!-- Rankings will be populated here -->
+                </tbody>
+            </table>
+            <div id="no-data" class="no-data">
+                <div class="no-data-icon">📊</div>
+                <p>No rankings available yet.</p>
+                <p>Be the first to play and set a high score!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/auth.js"></script>
+    <script>
+        function loadRankings() {
+            const topPlayers = AuthManager.getTopPlayers(100);
+            const currentUser = AuthManager.getCurrentUser();
+            const rankingsBody = document.getElementById('rankings-body');
+            const noDataDiv = document.getElementById('no-data');
+
+            if (currentUser) {
+                document.getElementById('user-info').style.display = 'block';
+                document.getElementById('user-name').textContent = currentUser.username;
+                document.getElementById('user-score').textContent = currentUser.highScore;
+
+                const userRank = topPlayers.findIndex(p => p.email === currentUser.email) + 1;
+                document.getElementById('user-rank').textContent = userRank > 0 ? `#${userRank}` : 'Unranked';
+            }
+
+            if (topPlayers.length === 0) {
+                noDataDiv.style.display = 'block';
+                rankingsBody.innerHTML = '';
+                return;
+            }
+
+            noDataDiv.style.display = 'none';
+
+            rankingsBody.innerHTML = topPlayers.map((player, index) => {
+                const rank = index + 1;
+                let rankDisplay = rank;
+                let rankClass = '';
+                
+                if (rank === 1) {
+                    rankDisplay = '🥇';
+                    rankClass = 'rank-1';
+                } else if (rank === 2) {
+                    rankDisplay = '🥈';
+                    rankClass = 'rank-2';
+                } else if (rank === 3) {
+                    rankDisplay = '🥉';
+                    rankClass = 'rank-3';
+                }
+
+                const isCurrentUser = currentUser && player.email === currentUser.email;
+                const currentUserClass = isCurrentUser ? 'current-user' : '';
+
+                return `
+                    <tr class="${rankClass} ${currentUserClass}">
+                        <td class="rank-medal">${rankDisplay}</td>
+                        <td>${player.username}${isCurrentUser ? ' (You)' : ''}</td>
+                        <td><strong>${player.highScore}</strong></td>
+                        <td>🪙 ${player.totalCoins}</td>
+                        <td>🎮 ${player.gamesPlayed}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function logout() {
+            AuthManager.logout();
+            window.location.href = 'login.html';
+        }
+
+        // Load rankings on page load
+        window.addEventListener('DOMContentLoaded', loadRankings);
+        
+        // Auto-refresh rankings every 5 seconds to keep them updated
+        setInterval(loadRankings, 5000);
+    </script>
+</body>
+</html>

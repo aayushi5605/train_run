@@ -1,0 +1,449 @@
+<!doctype html>
+<!--
+    game.html - Main Game Page
+    WebGL-based endless runner game with 3D graphics, collision detection, and scoring
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Subway Surfers - Endless Runner Game</title>
+  <!-- Game page styles -->
+  <link rel="stylesheet" href="css/game.css" type="text/css">
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="game.html" class="active">🎮 Play Game</a></li>
+      <li><a href="register.html">📝 Register</a></li>
+      <li><a href="login.html">🔐 Login</a></li>
+      <li><a href="rankings.html">🏆 Rankings</a></li>
+    </ul>
+  </nav>
+
+  <canvas id="glcanvas" width="900" height="650"></canvas>
+
+  <!-- Stats Display -->
+  <div id="stats-panel" class="stats-panel">
+    <div class="stat-item">
+      <span class="stat-label">🏃 Distance:</span>
+      <span class="stat-value" id="display-current-distance">0m</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">🏆 High Score:</span>
+      <span class="stat-value" id="display-high-score">0m</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">📊 Score:</span>
+      <span class="stat-value score_gain">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">🪙 Coins:</span>
+      <span class="stat-value coins_collected">0</span>
+    </div>
+  </div>
+
+  
+  <div id="game-legend" class="game-legend">
+    <div class="legend-title">🎮 Game Guide</div>
+    <div class="legend-item">
+      <span class="legend-icon player-icon">🏃</span>
+      <span class="legend-text"><strong>Runner</strong> - Larger avatar</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon coin-icon">🪙</span>
+      <span class="legend-text"><strong>Gold Coins</strong> - Collect!</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon obstacle-icon">🚧</span>
+      <span class="legend-text"><strong>Barriers</strong> - Dodge!</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon train-icon">🚂</span>
+      <span class="legend-text"><strong>Trains</strong> - Big threat!</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon boost-icon">⚡</span>
+      <span class="legend-text"><strong>Power-ups</strong> - Boost!</span>
+    </div>
+    <div class="legend-note">
+      <small>📏 3-Lane System • Enhanced Visibility</small>
+    </div>
+  </div>
+
+  <div id="ModalBox" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class='game_title'></p>
+        <div id="new-high-score-badge" class="high-score-badge">
+          🎉 NEW HIGH SCORE! 🎉
+        </div>
+        <p class="game_score"></p>
+        <div id="game-stats" class="game-stats">
+          <div class="stat-row">
+            <span>Coins Collected:</span>
+            <span id="coins-collected">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Distance:</span>
+            <span id="distance-traveled">0m</span>
+          </div>
+        </div>
+        <div class="modal-footer" id="arrow" onmouseover=""></div>
+        <p class="play_again" id="play_again" onmouseover=""></p>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="GameScore" class="score">
+    <div class="score_content">
+      <div class="score_box">
+        <h1>Score</h2>
+          <h2 class="score_gain"></h2>
+      </div>
+      <div class="score_box ml-20">
+        <h1>🪙 Coins</h1>
+        <h2 class="coins_collected">0</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls Panel (Just Pause Button) -->
+  <div class="controls-panel">
+    <button id="pauseButton" class="control-button pause-btn-control" onclick="pauseGame()" title="Pause Game (ESC)">
+      ⏸️
+    </button>
+  </div>
+
+  <!-- Pause Menu -->
+  <div id="PauseMenu" class="pause-menu">
+    <div class="pause-content">
+      <h1 class="pause-title">⏸️ GAME PAUSED</h1>
+      <div class="pause-stats">
+        <div class="pause-stat-item">
+          <span class="pause-label">Current Score:</span>
+          <span class="pause-value" id="pause-score">0</span>
+        </div>
+        <div class="pause-stat-item">
+          <span class="pause-label">Coins:</span>
+          <span class="pause-value" id="pause-coins">0</span>
+        </div>
+        <div class="pause-stat-item">
+          <span class="pause-label">Distance:</span>
+          <span class="pause-value" id="pause-distance">0m</span>
+        </div>
+      </div>
+      
+      <!-- Volume Control in Pause Menu -->
+      <div class="pause-volume-control">
+        <div class="pause-volume-slider-container">
+          <span class="pause-volume-icon" id="pauseVolumeIcon">🔊</span>
+          <input type="range" id="volumeSlider" class="pause-volume-slider" min="0" max="100" value="50" oninput="updateVolume(this.value)">
+          <span class="pause-volume-value" id="volumeValue">50%</span>
+        </div>
+      </div>
+      
+      <div class="pause-buttons">
+        <button class="pause-btn resume-btn" onclick="resumeGame()">
+          ▶️ Resume (ESC)
+        </button>
+        <button class="pause-btn restart-btn" onclick="restartGame()">
+          🔄 Restart
+        </button>
+        <button class="pause-btn quit-btn" onclick="quitGame()">
+          🏠 Main Menu
+        </button>
+      </div>
+      <div class="pause-hint">
+        Press <kbd>ESC</kbd> to resume
+      </div>
+    </div>
+  </div>
+
+</body>
+
+<script type="text/javascript">
+  var modal = document.getElementById('ModalBox');
+  var score = document.getElementById('GameScore');
+  var pauseMenu = document.getElementById('PauseMenu');
+  var isPaused = false;
+
+  var music;
+  music = new sound("assets/bgmusic.mp3");
+
+  // Pause/Resume Functions
+  function pauseGame() {
+    if (game_over || !game_start) return;
+    
+    isPaused = true;
+    pauseMenu.style.display = "flex";
+    
+    // Update pause menu stats with real data
+    if (typeof objects !== 'undefined' && objects.length > 0) {
+      document.getElementById('pause-score').textContent = objects[0].score || 0;
+      document.getElementById('pause-coins').textContent = objects[0].coins || 0;
+      document.getElementById('pause-distance').textContent = Math.floor(objects[0].distance || 0) + 'm';
+    }
+    
+    // Pause music
+    if (music && music.sound) {
+      music.sound.pause();
+    }
+  }
+
+  function resumeGame() {
+    isPaused = false;
+    pauseMenu.style.display = "none";
+    
+    // Resume music
+    if (music && music.sound) {
+      music.sound.play();
+    }
+  }
+
+  function restartGame() {
+    document.location.reload();
+  }
+
+  function quitGame() {
+    window.location.href = 'index.html';
+  }
+
+  function start() {
+    modal.style.display = "flex";
+    x = document.querySelector(".game_title");
+    x.textContent = "Train Run";
+    y = document.querySelector(".play_again");
+    y.style.display = "none";
+    
+    // Hide game stats and high score badge on start
+    document.getElementById('game-stats').style.display = 'none';
+    document.getElementById('new-high-score-badge').style.display = 'none';
+    
+    // Update stats display
+    updateStatsDisplay();
+  }
+
+  document.getElementById("arrow").addEventListener("click", start_box);
+  document.getElementById("play_again").addEventListener("click", restart_game);
+
+  function start_box() {
+    game_start = true;
+    music.play();
+    modal.style.display = "none";
+    // score.style.display = "flex"; // Keep it hidden, use stats panel instead
+    
+    // Increment games played when game starts
+    if (typeof AuthManager !== 'undefined') {
+      AuthManager.incrementGamesPlayed();
+    }
+    
+    // Set initial volume
+    if (music && music.sound) {
+      music.sound.volume = 0.5; // 50%
+    }
+  }
+
+  function restart_game() {
+    // Increment games played when clicking play again
+    if (typeof AuthManager !== 'undefined') {
+      AuthManager.incrementGamesPlayed();
+    }
+    document.location.reload();
+  }
+
+  // Volume Control Function
+  function updateVolume(value) {
+    const volumePercent = parseInt(value);
+    document.getElementById('volumeValue').textContent = volumePercent + '%';
+    
+    if (music && music.sound) {
+      music.sound.volume = volumePercent / 100;
+    }
+    
+    // Update icon based on volume (now in pause menu)
+    const volumeIcon = document.getElementById('pauseVolumeIcon');
+    if (volumePercent === 0) {
+      volumeIcon.textContent = '🔇';
+    } else if (volumePercent < 30) {
+      volumeIcon.textContent = '🔈';
+    } else if (volumePercent < 70) {
+      volumeIcon.textContent = '🔉';
+    } else {
+      volumeIcon.textContent = '🔊';
+    }
+  }
+
+  // Cache DOM queries for better performance
+  let scoreElement = null;
+  let coinsElement = null;
+  let distanceElement = null;
+  let highScoreElement = null;
+  
+  function update_score() {
+    // Initialize elements on first call
+    if (!scoreElement) {
+      scoreElement = document.querySelector(".score_gain");
+      coinsElement = document.querySelector(".coins_collected");
+      distanceElement = document.getElementById("display-current-distance");
+      highScoreElement = document.getElementById("display-high-score");
+    }
+    
+    // Only update if values changed (performance optimization)
+    if (scoreElement && objects[0]) {
+      const newScore = objects[0].score;
+      if (scoreElement.textContent != newScore) {
+        scoreElement.textContent = newScore;
+      }
+    }
+    
+    // Update coin counter
+    if (coinsElement && objects[0]) {
+      const newCoins = objects[0].coins || 0;
+      if (coinsElement.textContent != newCoins) {
+        coinsElement.textContent = newCoins;
+      }
+    }
+    
+    // Update current distance
+    if (distanceElement && objects[0]) {
+      const currentDistance = Math.floor(objects[0].distance || 0);
+      const distanceText = currentDistance + 'm';
+      if (distanceElement.textContent != distanceText) {
+        distanceElement.textContent = distanceText;
+      }
+    }
+    
+    // Update high score display - show current distance if greater
+    if (highScoreElement && objects[0]) {
+      const currentDistance = Math.floor(objects[0].distance || 0);
+      const currentUser = AuthManager.getCurrentUser();
+      const savedHighScore = currentUser ? currentUser.highScore : StorageManager.getHighScore();
+      
+      // Display the greater of current distance or saved high score
+      const displayScore = Math.max(currentDistance, savedHighScore);
+      const highScoreText = displayScore + 'm';
+      
+      if (highScoreElement.textContent != highScoreText) {
+        highScoreElement.textContent = highScoreText;
+      }
+    }
+  }
+
+  function Game_over() {
+    modal.style.display = "flex";
+    score.style.display = "none";
+
+    const finalScore = objects[0].score;
+    
+    // Check if user is logged in
+    const currentUser = AuthManager.getCurrentUser();
+    
+    if (currentUser) {
+      // Save score to logged-in user
+      const coins = (typeof coinsCollected !== 'undefined') ? coinsCollected : 0;
+      const distance = (typeof distanceTraveled !== 'undefined') ? Math.floor(distanceTraveled) : 0;
+      
+      AuthManager.updateUserStats(distance, coins, distance); // Use distance as high score
+    } else {
+      // Fall back to old storage method for non-logged-in users
+      const distance = (typeof distanceTraveled !== 'undefined') ? Math.floor(distanceTraveled) : 0;
+      const isNewHighScore = StorageManager.checkAndSetHighScore(distance); // Use distance for high score
+      
+      if (typeof coinsCollected !== 'undefined') {
+        StorageManager.addCoins(coinsCollected);
+      }
+      if (typeof distanceTraveled !== 'undefined') {
+        StorageManager.addDistance(Math.floor(distanceTraveled));
+      }
+      StorageManager.setLastPlayed();
+    }
+
+    x = document.querySelector(".game_title");
+    if(game_over)
+      x.textContent = "Game Over";
+    else if(finish)
+      x.textContent = "You Won!";
+
+    y = document.querySelector(".game_score");
+    y.textContent = "Your score: " + finalScore;
+    y.style.display = "flex";
+
+    // Show high score badge if new record (based on distance)
+    const distance = (typeof distanceTraveled !== 'undefined') ? Math.floor(distanceTraveled) : 0;
+    const userHighScore = currentUser ? currentUser.highScore : StorageManager.getHighScore();
+    if (distance > userHighScore || distance === userHighScore) {
+      document.getElementById('new-high-score-badge').style.display = 'block';
+    }
+
+    // Show game stats
+    const gameStats = document.getElementById('game-stats');
+    gameStats.style.display = 'block';
+    if (typeof coinsCollected !== 'undefined') {
+      document.getElementById('coins-collected').textContent = coinsCollected;
+    }
+    if (typeof distanceTraveled !== 'undefined') {
+      document.getElementById('distance-traveled').textContent = Math.floor(distanceTraveled) + 'm';
+    }
+
+    z = document.querySelector(".modal-footer");
+    z.style.display = "none";
+
+    w = document.querySelector(".play_again");
+    w.style.display = "flex";
+    w.textContent = "Play Again"
+
+    music.stop();
+    
+    // Update stats display
+    updateStatsDisplay();
+  }
+  
+  function updateStatsDisplay() {
+    const currentUser = AuthManager.getCurrentUser();
+    
+    if (currentUser) {
+      // Show logged-in user's stats (distance in meters)
+      document.getElementById('display-high-score').textContent = currentUser.highScore + 'm';
+    } else {
+      // Show general stats (distance in meters)
+      document.getElementById('display-high-score').textContent = StorageManager.getHighScore() + 'm';
+    }
+  }
+
+  function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function() {
+      this.sound.play();
+    }
+    this.stop = function() {
+      this.sound.pause();
+    }
+  }
+
+  start();
+
+</script>
+<script src="./js/storage.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./libs/gl-matrix.js"></script>
+<script src="./libs/webgl-utils.js"></script>
+
+<script src="./js/core-utils.js"></script>
+<script src="./js/finishline.js"></script>
+<script src="./js/game-objects.js"></script>
+<script src="./js/environment.js"></script>
+<script src="./js/player.js"></script>
+<script src="./js/input-handler.js"></script>
+<script src="./js/renderer.js"></script>
+<script src="./js/game-engine.js"></script>
+
+</html>

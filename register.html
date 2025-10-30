@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<!--
+    register.html - User Registration Page
+    New user signup form with validation for username, email, phone, and password
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Train Run</title>
+    <!-- Main styles for all pages except game -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="register-page">
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="game.html">🎮 Play Game</a></li>
+            <li><a href="register.html" class="active">📝 Register</a></li>
+            <li><a href="login.html">🔐 Login</a></li>
+            <li><a href="rankings.html">🏆 Rankings</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>📝 Register</h1>
+        
+        <div id="success-message" class="success-message"></div>
+
+        <form id="register-form">
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" name="username" placeholder="Enter Username" required>
+                <div class="error-message" id="username-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" placeholder="Enter E-mail" required>
+                <div class="error-message" id="email-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number </label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required maxlength="10" pattern="[0-9]{10}">
+                <div class="error-message" id="phone-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                <div class="error-message" id="password-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password *</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                <div class="error-message" id="confirm-password-error"></div>
+            </div>
+
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="login.html">Login here</a>
+        </div>
+    </div>
+
+    <script src="./js/auth.js"></script>
+    <script>
+        // Form validation and submission
+        const form = document.getElementById('register-form');
+        const successMessage = document.getElementById('success-message');
+
+        // Validation functions
+        function validateUsername(name) {
+            if (name.trim().length < 2) {
+                return 'Name must be at least 2 characters long';
+            }
+            if (!/^[a-zA-Z\s]+$/.test(name)) {
+                return 'Name can only contain letters and spaces';
+            }
+            return '';
+        }
+
+        function validateEmail(email) {
+            if (!email.trim()) {
+                return 'Email is required';
+            }
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return 'Please enter a valid email address';
+            }
+            return '';
+        }
+
+        function validatePhone(phone) {
+            const phoneDigits = phone.replace(/\D/g, ''); // Remove non-digit characters
+            if (phoneDigits.length !== 10) {
+                return 'Invalid number - Phone number must be exactly 10 digits';
+            }
+            if (!/^\d{10}$/.test(phone.trim())) {
+                return 'Invalid number - Please enter only digits';
+            }
+            return '';
+        }
+
+        function validateAddress(address) {
+            if (address.trim().length < 5) {
+                return 'Address must be at least 5 characters long';
+            }
+            return '';
+        }
+
+        function validatePhone(phone) {
+            const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+            if (!phoneRegex.test(phone)) {
+                return 'Please enter a valid phone number (at least 10 digits)';
+            }
+            return '';
+        }
+
+        function validatePassword(password) {
+            if (password.length < 6) {
+                return 'Password must be at least 6 characters long';
+            }
+            if (!/(?=.*[a-z])/.test(password)) {
+                return 'Password must contain at least one lowercase letter';
+            }
+            if (!/(?=.*[A-Z])/.test(password)) {
+                return 'Password must contain at least one uppercase letter';
+            }
+            if (!/(?=.*\d)/.test(password)) {
+                return 'Password must contain at least one number';
+            }
+            return '';
+        }
+
+        function validateConfirmPassword(password, confirmPassword) {
+            if (password !== confirmPassword) {
+                return 'Passwords do not match';
+            }
+            return '';
+        }
+
+        // Show error message
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+
+        // Hide error message
+        function hideError(fieldId) {
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            errorElement.classList.remove('show');
+        }
+
+        // Real-time validation
+        document.getElementById('username').addEventListener('blur', function() {
+            const error = validateName(this.value);
+            if (error) showError('name', error);
+            else hideError('name');
+        });
+
+        document.getElementById('email').addEventListener('blur', function() {
+            const error = validateEmail(this.value);
+            if (error) showError('email', error);
+            else hideError('email');
+        });
+
+        document.getElementById('phone').addEventListener('blur', function() {
+            const error = validatePhone(this.value);
+            if (error) showError('phone', error);
+            else hideError('phone');
+        });
+
+        // Restrict phone input to numbers only
+        document.getElementById('phone').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, ''); // Remove non-digit characters
+        });
+
+        document.getElementById('password').addEventListener('blur', function() {
+            const error = validatePassword(this.value);
+            if (error) showError('password', error);
+            else hideError('password');
+        });
+
+        document.getElementById('confirm-password').addEventListener('blur', function() {
+            const password = document.getElementById('password').value;
+            const error = validateConfirmPassword(password, this.value);
+            if (error) showError('confirm-password', error);
+            else hideError('confirm-password');
+        });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            let isValid = true;
+            const errors = {
+                username: validateUsername(username),
+                email: validateEmail(email),
+                phone: validatePhone(phone),
+                password: validatePassword(password),
+                confirmPassword: validateConfirmPassword(password, confirmPassword)
+            };
+
+            Object.keys(errors).forEach(field => {
+                if (errors[field]) {
+                    showError(field === 'confirmPassword' ? 'confirm-password' : field, errors[field]);
+                    isValid = false;
+                } else {
+                    hideError(field === 'confirmPassword' ? 'confirm-password' : field);
+                }
+            });
+
+            if (isValid) {
+                const userData = { username, email, phone, password };
+                const result = AuthManager.registerUser(userData);
+
+                if (result.success) {
+                    successMessage.textContent = '✓ ' + result.message + '! Redirecting to login...';
+                    successMessage.classList.add('show');
+                    form.reset();
+                    
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showError('email', result.message);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

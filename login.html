@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!--
+    login.html - User Login Page
+    Handles user authentication with email and password validation
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Train Run</title>
+    <!-- Main styles for all pages except game -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-page">
+    <nav>
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="game.html">🎮 Play Game</a></li>
+            <li><a href="register.html">📝 Register</a></li>
+            <li><a href="login.html" class="active">🔐 Login</a></li>
+            <li><a href="rankings.html">🏆 Rankings</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>🔐 Login</h1>
+        
+        <!-- Logout button for already logged in users -->
+        <div id="logout-section" style="display: none; margin-bottom: 20px;">
+            <p>You are already logged in.</p>
+            <button id="logout-btn" class="btn" style="background-color: #f44336;">Logout</button>
+        </div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+
+            <div class="error-message" id="error-message"></div>
+
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <div class="register-link">
+            Don't have an account? <a href="register.html">Register here</a>
+        </div>
+    </div>
+
+    <script src="./js/auth.js"></script>
+    <script>
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+        const logoutSection = document.getElementById('logout-section');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Check if user is already logged in
+        if (AuthManager.isLoggedIn()) {
+            // Show logout section
+            logoutSection.style.display = 'block';
+            
+            // Check for return URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const returnUrl = urlParams.get('return') || 'index.html';
+            
+            // Auto redirect after 2 seconds if no interaction
+            const redirectTimer = setTimeout(() => {
+                window.location.href = returnUrl;
+            }, 2000);
+            
+            // Handle logout button click
+            logoutBtn.addEventListener('click', function() {
+                clearTimeout(redirectTimer);
+                AuthManager.logout();
+                logoutSection.style.display = 'none';
+                errorMessage.style.background = 'rgba(76, 175, 80, 0.3)';
+                errorMessage.style.borderLeftColor = '#4CAF50';
+                errorMessage.style.color = '#4CAF50';
+                errorMessage.textContent = '✓ Logged out successfully!';
+                errorMessage.classList.add('show');
+            });
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get form values
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Hide previous error messages
+            errorMessage.classList.remove('show');
+
+            // Validate inputs
+            if (!email) {
+                errorMessage.textContent = '⚠️ Please enter your email address';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            if (!password) {
+                errorMessage.textContent = '⚠️ Please enter your password';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            // Attempt login
+            const result = AuthManager.login(email, password);
+
+            if (result.success) {
+                // Show success and redirect
+                errorMessage.style.background = 'rgba(76, 175, 80, 0.3)';
+                errorMessage.style.borderLeftColor = '#4CAF50';
+                errorMessage.style.color = '#4CAF50';
+                errorMessage.textContent = '✓ Login successful! Redirecting...';
+                errorMessage.classList.add('show');
+
+                // Check for return URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const returnUrl = urlParams.get('return') || 'index.html';
+
+                setTimeout(() => {
+                    window.location.href = returnUrl;
+                }, 1000);
+            } else {
+                // Show error message
+                errorMessage.textContent = '⚠️ ' + result.message;
+                errorMessage.classList.add('show');
+            }
+        });
+
+        // Clear error message when user starts typing
+        document.getElementById('email').addEventListener('input', function() {
+            errorMessage.classList.remove('show');
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            errorMessage.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
