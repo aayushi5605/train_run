@@ -2,6 +2,13 @@
 <!--
     login.html - User Login Page
     Handles user authentication with email and password validation
+    
+    Page Structure:
+    - Navigation Bar: Links to all main sections
+    - Login Form: Email and password input fields
+    - Validation Messages: Success/error feedback
+    - Logout Section: For already logged-in users
+    - Scripts: Authentication and form handling
 -->
 <html lang="en">
 <head>
@@ -12,6 +19,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="login-page">
+    <!-- Navigation Bar - Consistent across all pages -->
     <nav>
         <ul>
             <li><a href="index.html">🏠 Home</a></li>
@@ -22,38 +30,49 @@
         </ul>
     </nav>
 
+    <!-- Main Content Container -->
     <div class="container">
         <h1>🔐 Login</h1>
         
-        <!-- Logout button for already logged in users -->
+        <!-- Logout Section - Visible only when user is already logged in -->
         <div id="logout-section" style="display: none; margin-bottom: 20px;">
             <p>You are already logged in.</p>
             <button id="logout-btn" class="btn" style="background-color: #f44336;">Logout</button>
         </div>
 
+        <!-- Login Form - Email and password authentication -->
         <form id="login-form">
+            <!-- Email Input Field -->
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required placeholder="Enter your email">
             </div>
 
+            <!-- Password Input Field -->
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required placeholder="Enter your password">
             </div>
 
+            <!-- Error Message Display -->
             <div class="error-message" id="error-message"></div>
 
+            <!-- Login Submit Button -->
             <button type="submit" class="btn">Login</button>
         </form>
 
+        <!-- Registration Link - For new users -->
         <div class="register-link">
             Don't have an account? <a href="register.html">Register here</a>
         </div>
     </div>
 
+    <!-- Authentication Manager Script -->
     <script src="./js/auth.js"></script>
+    
+    <!-- Page-specific JavaScript for Login/Logout handling -->
     <script>
+        // Initialize DOM element references
         const form = document.getElementById('login-form');
         const errorMessage = document.getElementById('error-message');
         const logoutSection = document.getElementById('logout-section');

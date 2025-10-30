@@ -2,17 +2,26 @@
 <!--
     game.html - Main Game Page
     WebGL-based endless runner game with 3D graphics, collision detection, and scoring
+
+    Page Structure:
+    - Navigation Bar: Links to all main sections
+    - Game Canvas: WebGL rendering surface for 3D game
+    - Stats Panel: Real-time game statistics display
+    - Control Instructions: Game controls guide
+    - Game Over Modal: End game screen with score and options
+    - Scripts: Game engine and component initialization
 -->
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <title>Subway Surfers - Endless Runner Game</title>
-  <!-- Game page styles -->
+  <title>Train Run - Endless Runner Game</title>
+  <!-- Game page styles - Separate from main site styles -->
   <link rel="stylesheet" href="css/game.css" type="text/css">
 </head>
 
 <body>
+  <!-- Navigation Bar - Consistent across all pages -->
   <nav>
     <ul>
       <li><a href="index.html">🏠 Home</a></li>
@@ -23,6 +32,7 @@
     </ul>
   </nav>
 
+  <!-- Game Canvas - Main WebGL rendering surface -->
   <canvas id="glcanvas" width="900" height="650"></canvas>
 
   <!-- Stats Display -->
@@ -46,16 +56,20 @@
   </div>
 
   
+  <!-- Game Legend - Visual guide for game elements and mechanics -->
   <div id="game-legend" class="game-legend">
     <div class="legend-title">🎮 Game Guide</div>
+    <!-- Player Character Description -->
     <div class="legend-item">
       <span class="legend-icon player-icon">🏃</span>
       <span class="legend-text"><strong>Runner</strong> - Larger avatar</span>
     </div>
+    <!-- Collectible Items -->
     <div class="legend-item">
       <span class="legend-icon coin-icon">🪙</span>
       <span class="legend-text"><strong>Gold Coins</strong> - Collect!</span>
     </div>
+    <!-- Obstacle Types -->
     <div class="legend-item">
       <span class="legend-icon obstacle-icon">🚧</span>
       <span class="legend-text"><strong>Barriers</strong> - Dodge!</span>
@@ -64,23 +78,29 @@
       <span class="legend-icon train-icon">🚂</span>
       <span class="legend-text"><strong>Trains</strong> - Big threat!</span>
     </div>
+    <!-- Power-up Items -->
     <div class="legend-item">
       <span class="legend-icon boost-icon">⚡</span>
       <span class="legend-text"><strong>Power-ups</strong> - Boost!</span>
     </div>
+    <!-- Game Layout Information -->
     <div class="legend-note">
       <small>📏 3-Lane System • Enhanced Visibility</small>
     </div>
   </div>
 
+  <!-- Game Over Modal - End game screen with score summary -->
   <div id="ModalBox" class="modal">
     <div class="modal-content">
+      <!-- Modal Header - Game result and high score notification -->
       <div class="modal-header">
         <p class='game_title'></p>
+        <!-- High Score Achievement Badge -->
         <div id="new-high-score-badge" class="high-score-badge">
           🎉 NEW HIGH SCORE! 🎉
         </div>
         <p class="game_score"></p>
+        <!-- Detailed Game Statistics -->
         <div id="game-stats" class="game-stats">
           <div class="stat-row">
             <span>Coins Collected:</span>
@@ -353,12 +373,6 @@
       const distance = (typeof distanceTraveled !== 'undefined') ? Math.floor(distanceTraveled) : 0;
       const isNewHighScore = StorageManager.checkAndSetHighScore(distance); // Use distance for high score
       
-      if (typeof coinsCollected !== 'undefined') {
-        StorageManager.addCoins(coinsCollected);
-      }
-      if (typeof distanceTraveled !== 'undefined') {
-        StorageManager.addDistance(Math.floor(distanceTraveled));
-      }
       StorageManager.setLastPlayed();
     }
 

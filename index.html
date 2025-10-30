@@ -2,6 +2,12 @@
 <!--
     index.html - Home Page
     Main landing page with game overview, statistics, and navigation to other pages
+    
+    Page Structure:
+    - Navigation Bar: Links to all main sections of the game
+    - Hero Section: Game title and play button
+    - Stats Section: Display of user statistics
+    - Footer: Game information and user authentication status
 -->
 <html lang="en">
 <head>
@@ -12,6 +18,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="home-page">
+    <!-- Navigation Bar - Main menu for site navigation -->
     <nav>
         <ul>
             <li><a href="index.html" class="active">🏠 Home</a></li>
@@ -22,6 +29,7 @@
         </ul>
     </nav>
 
+    <!-- Hero Section - Main title and call-to-action -->
     <div class="hero">
         <h1>🚇 TRAIN RUN</h1>
         <p>Experience the Ultimate Endless Runner Adventure!</p>
@@ -31,62 +39,53 @@
         </div>
     </div>
 
+    <!-- Stats Container - Displays user statistics or global stats for guests -->
     <div class="stats-container">
+        <!-- High Score Card - Shows personal best or global best -->
         <div class="stat-card">
             <div class="stat-icon">🏆</div>
             <div class="stat-value" id="high-score">0</div>
             <div class="stat-label">High Score</div>
         </div>
         
-        <div class="stat-card">
-            <div class="stat-icon">🪙</div>
-            <div class="stat-value" id="total-coins">0</div>
-            <div class="stat-label">Total Coins</div>
-        </div>
-        
+        <!-- Games Played Card - Shows total games played -->
         <div class="stat-card">
             <div class="stat-icon">🎮</div>
             <div class="stat-value" id="games-played">0</div>
             <div class="stat-label">Games Played</div>
         </div>
         
-        <div class="stat-card">
-            <div class="stat-icon">📏</div>
-            <div class="stat-value" id="total-distance">0</div>
-            <div class="stat-label">Total Distance (m)</div>
-        </div>
     </div>
 
+    <!-- Footer - Game information and user authentication status -->
     <footer>
         <p>🎮 Train Run - WebGL Endless Runner Game</p>
         <p>Built with HTML, CSS, JavaScript, and JSON</p>
         <p id="user-info-footer"></p>
     </footer>
 
+    <!-- Required JavaScript Libraries -->
     <script src="./js/storage.js"></script>
     <script src="./js/auth.js"></script>
+    <!-- Page-specific JavaScript for stats and authentication -->
     <script>
-        // Load and display stats on page load
+        // Initialize page content and user stats when DOM is fully loaded
         window.addEventListener('DOMContentLoaded', () => {
             const currentUser = AuthManager.getCurrentUser();
             
             if (currentUser) {
                 // Display logged-in user's stats
                 document.getElementById('high-score').textContent = currentUser.highScore;
-                document.getElementById('total-coins').textContent = currentUser.totalCoins;
                 document.getElementById('games-played').textContent = currentUser.gamesPlayed;
-                document.getElementById('total-distance').textContent = currentUser.totalDistance;
                 
                 // Show welcome message and logout link
                 const footerInfo = document.getElementById('user-info-footer');
-                footerInfo.innerHTML = `Welcome, <strong>${currentUser.name}</strong>! | <a href="#" onclick="logout(); return false;">Logout</a>`;
+                footerInfo.innerHTML = `Welcome, <strong>${currentUser.username}</strong>! | <a href="#" onclick="logout(); return false;">Logout</a>`;
             } else {
-                // Display general stats
+                                // Display general stats
                 const stats = StorageManager.getAllStats();
                 document.getElementById('high-score').textContent = stats.highScore;
-                document.getElementById('total-coins').textContent = stats.totalCoins;
                 document.getElementById('games-played').textContent = stats.gamesPlayed;
-                document.getElementById('total-distance').textContent = stats.totalDistance;
                 
                 // Show login prompt
                 const footerInfo = document.getElementById('user-info-footer');

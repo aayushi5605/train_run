@@ -4,8 +4,8 @@
  */
 
 class AuthManager {
-    static CURRENT_USER_KEY = 'subway_current_user';
-    static USERS_KEY = 'subway_users';
+    static CURRENT_USER_KEY = 'game_current_user';
+    static USERS_KEY = 'game_users';
 
     /**
      * Get currently logged in user
@@ -63,9 +63,7 @@ class AuthManager {
                 password: userData.password,
                 registeredDate: new Date().toISOString(),
                 highScore: 0,
-                totalCoins: 0,
                 gamesPlayed: 0,
-                totalDistance: 0
             };
 
             users.push(newUser);
@@ -125,9 +123,6 @@ class AuthManager {
         const userIndex = users.findIndex(u => u.email === currentUser.email);
         
         if (userIndex !== -1) {
-            users[userIndex].totalCoins += coins;
-            users[userIndex].totalDistance += distance;
-            
             if (score > users[userIndex].highScore) {
                 users[userIndex].highScore = score;
             }
@@ -164,9 +159,7 @@ class AuthManager {
                 username: user.username,
                 email: user.email,
                 highScore: user.highScore,
-                totalCoins: user.totalCoins,
                 gamesPlayed: user.gamesPlayed,
-                totalDistance: user.totalDistance
             }));
     }
 

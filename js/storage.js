@@ -2,45 +2,56 @@
 const StorageManager = {
   // Keys for localStorage
   KEYS: {
-    HIGH_SCORE: 'subway_surfers_high_score',
-    TOTAL_COINS: 'subway_surfers_total_coins',
-    GAMES_PLAYED: 'subway_surfers_games_played',
-    TOTAL_DISTANCE: 'subway_surfers_total_distance',
-    ACHIEVEMENTS: 'subway_surfers_achievements',
-    LAST_PLAYED: 'subway_surfers_last_played',
-    SETTINGS: 'subway_surfers_settings'
+    HIGH_SCORE: 'train_run_high_score',
+    GAMES_PLAYED: 'train_run_games_played',
+    LAST_PLAYED: 'train_run_last_played',
+    SETTINGS: 'train_run_settings'
   },
 
   // Initialize storage
   init() {
-    if (!this.getHighScore()) {
-      this.setHighScore(0);
-    }
-    if (!this.getTotalCoins()) {
-      this.setTotalCoins(0);
-    }
-    if (!this.getGamesPlayed()) {
-      this.setGamesPlayed(0);
-    }
-    if (!this.getTotalDistance()) {
-      this.setTotalDistance(0);
-    }
-    if (!this.getAchievements()) {
-      this.setAchievements([]);
+    // Check if this is a fresh visit or page reload of index.html
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+      const lastVisitTime = sessionStorage.getItem('lastVisitTime');
+      const currentTime = new Date().getTime();
+      
+      // If there's no lastVisitTime or the page was reloaded, reset guest stats
+      if (!lastVisitTime || document.referrer === '') {
+        this.resetGuestStats();
+      }
+      
+      // Update last visit time
+      sessionStorage.setItem('lastVisitTime', currentTime);
     }
   },
 
-  // High Score
+  // Reset guest stats
+  resetGuestStats() {
+    // Only reset stats if user is not logged in
+    if (!AuthManager.getCurrentUser()) {
+      this.setHighScore(0);
+      this.setGamesPlayed(0);
+    }
+  },
+
+    // High Score
   getHighScore() {
+    const currentUser = AuthManager.getCurrentUser();
+    if (!currentUser) {
+      return "--";
+    }
     return parseInt(localStorage.getItem(this.KEYS.HIGH_SCORE)) || 0;
   },
 
   setHighScore(score) {
-    localStorage.setItem(this.KEYS.HIGH_SCORE, score);
+    if (AuthManager.getCurrentUser()) {
+      localStorage.setItem(this.KEYS.HIGH_SCORE, score);
+    }
   },
 
   checkAndSetHighScore(score) {
-    const currentHigh = this.getHighScore();
+    if (!AuthManager.getCurrentUser()) return false;
+    const currentHigh = parseInt(localStorage.getItem(this.KEYS.HIGH_SCORE)) || 0;
     if (score > currentHigh) {
       this.setHighScore(score);
       return true; // New high score!
@@ -48,22 +59,12 @@ const StorageManager = {
     return false;
   },
 
-  // Total Coins
-  getTotalCoins() {
-    return parseInt(localStorage.getItem(this.KEYS.TOTAL_COINS)) || 0;
-  },
-
-  setTotalCoins(coins) {
-    localStorage.setItem(this.KEYS.TOTAL_COINS, coins);
-  },
-
-  addCoins(amount) {
-    const current = this.getTotalCoins();
-    this.setTotalCoins(current + amount);
-  },
-
   // Games Played
   getGamesPlayed() {
+    const currentUser = AuthManager.getCurrentUser();
+    if (!currentUser) {
+      return "--";
+    }
     return parseInt(localStorage.getItem(this.KEYS.GAMES_PLAYED)) || 0;
   },
 
@@ -72,43 +73,12 @@ const StorageManager = {
   },
 
   incrementGamesPlayed() {
-    const current = this.getGamesPlayed();
-    this.setGamesPlayed(current + 1);
-  },
-
-  // Total Distance
-  getTotalDistance() {
-    return parseInt(localStorage.getItem(this.KEYS.TOTAL_DISTANCE)) || 0;
-  },
-
-  setTotalDistance(distance) {
-    localStorage.setItem(this.KEYS.TOTAL_DISTANCE, distance);
-  },
-
-  addDistance(meters) {
-    const current = this.getTotalDistance();
-    this.setTotalDistance(current + meters);
-  },
-
-  // Achievements
-  getAchievements() {
-    const achievements = localStorage.getItem(this.KEYS.ACHIEVEMENTS);
-    return achievements ? JSON.parse(achievements) : [];
-  },
-
-  setAchievements(achievements) {
-    localStorage.setItem(this.KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
-  },
-
-  unlockAchievement(achievementId) {
-    const achievements = this.getAchievements();
-    if (!achievements.includes(achievementId)) {
-      achievements.push(achievementId);
-      this.setAchievements(achievements);
-      return true; // Achievement unlocked!
+    if (AuthManager.getCurrentUser()) {
+      const currentGames = parseInt(localStorage.getItem(this.KEYS.GAMES_PLAYED)) || 0;
+      localStorage.setItem(this.KEYS.GAMES_PLAYED, currentGames + 1);
     }
-    return false;
   },
+
 
   // Last Played
   setLastPlayed() {
@@ -137,10 +107,7 @@ const StorageManager = {
   getAllStats() {
     return {
       highScore: this.getHighScore(),
-      totalCoins: this.getTotalCoins(),
       gamesPlayed: this.getGamesPlayed(),
-      totalDistance: this.getTotalDistance(),
-      achievements: this.getAchievements(),
       lastPlayed: this.getLastPlayed()
     };
   },
@@ -165,7 +132,7 @@ const StorageManager = {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `subway_surfers_data_${new Date().getTime()}.json`;
+    link.download = `train_run_data_${new Date().getTime()}.json`;
     link.click();
   }
 };
