@@ -8,6 +8,11 @@ const StorageManager = {
     SETTINGS: 'train_run_settings'
   },
 
+  // Check if AuthManager is available
+  isAuth() {
+    return typeof AuthManager !== 'undefined';
+  },
+
   // Initialize storage
   init() {
     // Check if this is a fresh visit or page reload of index.html
@@ -27,8 +32,8 @@ const StorageManager = {
 
   // Reset guest stats
   resetGuestStats() {
-    // Only reset stats if user is not logged in
-    if (!AuthManager.getCurrentUser()) {
+    // Only reset stats if AuthManager exists and user is not logged in
+    if (this.isAuth() && !AuthManager.getCurrentUser()) {
       this.setHighScore(0);
       this.setGamesPlayed(0);
     }
@@ -36,6 +41,7 @@ const StorageManager = {
 
     // High Score
   getHighScore() {
+    if (!this.isAuth()) return 0;
     const currentUser = AuthManager.getCurrentUser();
     if (!currentUser) {
       return "--";
@@ -44,13 +50,13 @@ const StorageManager = {
   },
 
   setHighScore(score) {
-    if (AuthManager.getCurrentUser()) {
+    if (this.isAuth() && AuthManager.getCurrentUser()) {
       localStorage.setItem(this.KEYS.HIGH_SCORE, score);
     }
   },
 
   checkAndSetHighScore(score) {
-    if (!AuthManager.getCurrentUser()) return false;
+    if (!this.isAuth() || !AuthManager.getCurrentUser()) return false;
     const currentHigh = parseInt(localStorage.getItem(this.KEYS.HIGH_SCORE)) || 0;
     if (score > currentHigh) {
       this.setHighScore(score);
@@ -61,6 +67,7 @@ const StorageManager = {
 
   // Games Played
   getGamesPlayed() {
+    if (!this.isAuth()) return 0;
     const currentUser = AuthManager.getCurrentUser();
     if (!currentUser) {
       return "--";
@@ -69,11 +76,13 @@ const StorageManager = {
   },
 
   setGamesPlayed(count) {
-    localStorage.setItem(this.KEYS.GAMES_PLAYED, count);
+    if (this.isAuth() && AuthManager.getCurrentUser()) {
+      localStorage.setItem(this.KEYS.GAMES_PLAYED, count);
+    }
   },
 
   incrementGamesPlayed() {
-    if (AuthManager.getCurrentUser()) {
+    if (this.isAuth() && AuthManager.getCurrentUser()) {
       const currentGames = parseInt(localStorage.getItem(this.KEYS.GAMES_PLAYED)) || 0;
       localStorage.setItem(this.KEYS.GAMES_PLAYED, currentGames + 1);
     }
